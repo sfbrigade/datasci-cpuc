@@ -13,7 +13,7 @@ TBD
 ## Contributing DSWG Members
 | Name | Slack Handle | Contribution |
 | ---| --- | --- |
-| Dylan Sather| | 	@dylburger | Analysis |
+| Dylan Sather| @dylburger | Analysis |
 | Sanat Moningi | @sanat | Visualization |
 | Tyler Field | @tyler | Visualization |
 | Geoffrey Pay | @gpay | Visualization |
