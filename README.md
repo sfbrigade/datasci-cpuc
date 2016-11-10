@@ -8,7 +8,14 @@ TBD
 
 ### Live links
  - TBD
-
+ 
+## Working Plan
+1. Bubble map/cartogram: 
+ - CA baselayer
+ - bubbles for each tract: 
+     - radius encodes data from CPUC (upload/download speed)
+     - color encodes census tract data (income levels)
+ - more info on chart to the side
 
 ## Contributing DSWG Members
 | Name | Slack Handle | Contribution |
