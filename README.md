@@ -63,3 +63,16 @@ $ git push
 [Create a Pull Request](https://help.github.com/articles/creating-a-pull-request/) from your pushed branch (compare branch) to this repo (base branch)   
 ...  
 Profit!
+
+## Sources
+
+[census shapefile](ftp://ftp2.census.gov/geo/pvs/tiger2010st/06_California/)
+[shapefiles](https://www.census.gov/geo/maps-data/data/tiger-line.html)
+
+data steps:
+1. download[shapefile](ftp://ftp2.census.gov/geo/pvs/tiger2010st/06_California/06/tl_2010_06_tabblock10.zip) (direct link 439MB) of California census tract blocks 
+1. scrape properties of shapefiles into csv `ogr2ogr -f CSV caCensusBlocks.csv tl_2010_06_tabblock10.shp`
+1. income estimates only available for blockgroup level. scrape from census API, [posted at numeracy](https://numeracy.co/projects/1CHe8jPRvdd/data-sources/ca-income-by-blockgroup)
+1. test results from cpuc pulled out of [looker](https://census.looker.com/embed/explore/sf_publicdata/calspeed_mobile_field_test?qid=s6iV16nhHgzv1S95FbliHY)
+1. join lon/lat from caCensusBlocks.csv to CPUC data
+1. join 
