@@ -14,56 +14,76 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access
 var svg = d3.select(map.getPanes().overlayPane).append("svg"),
     g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
-d3.json("/data/cal_censustract_2010.geojson", function(collection) {
-    var transform = d3.geo.transform({point: projectPoint}),
+var cpucMetric = "downMean";
+var censusMetric = "income";
+
+d3.csv("/data/output.csv", function(data) {
+    var color = d3.scale.linear()
+        .range(["#c0e4aa","#e6573d"])
+        .domain(d3.extent(data, function(d){return +d[cpucMetric]}))
+        // debugger
+    // var transform = d3.geo.transform({point: projectPoint}),
+    var transform = d3.geo.transform(),
         path = d3.geo.path().projection(transform);
-    var feature = g.selectAll("path")
-        .data(collection.features)
+    var radius = d3.scale.linear()
+        .range([3, 15])
+        .domain(d3.extent(data, function(d){return +d[censusMetric]}))
+
+    data.forEach(function(d) {
+			d.LatLng = new L.LatLng(d.lon,d.lat)
+		})
+
+    data = data.sort(function(a, b) { return b[censusMetric] - a[censusMetric]; })
+
+    var feature = g.selectAll("circle")
+        .data(data)
         .enter()
-        .append("path")
+        .append("circle")
         .attr("id", function(d){
-          return d.properties.GEOID;
+          return d.geoid10;
         })
-        .style("stroke", "#000000")
-        .style("fill", "#B9E7FF")
-        .style("fill-opacity", 0.5)
+        .attr("r", function(d) { return radius(d[censusMetric]); })
+        .attr('fill', function(d){ return color(d[cpucMetric]) } )
         .style("stroke-width",0.7)
+        .style("fill-opacity", 0.5)
+        .style("cursor", "default")
         .on("mouseover", function(d){
-          d3.select(this).style("stroke", "#B9E7FF")
-          .style("fill", "ff0000")
+          d3.select(this)
           .style("fill-opacity", 1)
           .style("stroke-width",1);
         })
         .on("mouseout", function(d){
-           d3.select(this).style("stroke", "#B9E7FF")
-           .style("stroke", "#000000")
-           .style("fill", "#B9E7FF")
+           d3.select(this)
            .style("fill-opacity", 0.5)
            .style("stroke-width",0.7);
         });
 
-    map.on("viewreset", reset);
-    reset();
+    map.on("viewreset", update);
+		update();
 
-    // Reposition the SVG to cover the features.
-    function reset() {
-        var bounds = path.bounds(collection),
-            topLeft = bounds[0],
-            bottomRight = bounds[1];
+		function update() {
+      // var bounds = path.bounds(feature),
+      //     topLeft = bounds[0],
+      //     bottomRight = bounds[1];
+      //
+      // svg .attr("width", bottomRight[0] - topLeft[0])
+      //     .attr("height", bottomRight[1] - topLeft[1])
+      //     .style("left", topLeft[0] + "px")
+      //     .style("top", topLeft[1] + "px");
+      //
+      // g   .attr("transform", "translate(" + -topLeft[0] + "," + -topLeft[1] + ")");
 
-        svg .attr("width", bottomRight[0] - topLeft[0])
-            .attr("height", bottomRight[1] - topLeft[1])
-            .style("left", topLeft[0] + "px")
-            .style("top", topLeft[1] + "px");
-
-        g   .attr("transform", "translate(" + -topLeft[0] + "," + -topLeft[1] + ")");
-
-        feature.attr("d", path);
-    }
+			feature.attr("transform", function(d) {
+				return "translate("+
+					map.latLngToLayerPoint(d.LatLng).x +","+
+					map.latLngToLayerPoint(d.LatLng).y +")";
+				}
+			)
+		}
 
     // Use Leaflet to implement a D3 geometric transformation.
-    function projectPoint(x, y) {
-        var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-        this.stream.point(point.x, point.y);
-    }
+    // function projectPoint(x, y) {
+    //     var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+    //     this.stream.point(point.x, point.y);
+    // }
 });

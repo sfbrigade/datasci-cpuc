@@ -38,6 +38,8 @@ let output = cpucData.map(datapoint => {
   let lon = (latlon==undefined) ? undefined : Number.parseFloat(latlon.INTPTLAT10)
   let lat = (latlon==undefined) ? undefined : Number.parseFloat(latlon.INTPTLON10)
 
+  if (latlon === undefined ) return
+  
   return {
     geoid10:    datapoint['Calspeed Mobile Field Test Census ID 2010'],
     downMean:   datapoint['Calspeed Mobile Field Test Average Combined Down Mean'],

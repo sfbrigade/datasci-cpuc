@@ -10,6 +10,11 @@ body, #map {
     overflow: hidden;
 }
 
+#map svg {
+  height: 100vh;
+  width: 100vw;
+}
+
 .sidebar {
     z-index: 800;
     background: #f7f7f7;
