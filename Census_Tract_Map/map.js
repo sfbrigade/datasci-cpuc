@@ -17,7 +17,7 @@ var svg = d3.select(map.getPanes().overlayPane).append("svg"),
 var cpucMetric = "downMean";
 var censusMetric = "income";
 
-d3.csv("/data/output.csv", function(data) {
+d3.csv("data/output.csv", function(data) {
     var color = d3.scale.linear()
         .range(["#c0e4aa","#e6573d"])
         .domain(d3.extent(data, function(d){return +d[cpucMetric]}))
