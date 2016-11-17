@@ -7,7 +7,7 @@ This project is part of [Data Science Working Group at Code for San Francisco](h
 TBD
 
 ### Live links
- - TBD
+[map (alpha)](http://old.codeforsanfrancisco.org/datasci-cpuc/Census_Tract_Map/)
  
 ## Working Plan
 1. Bubble map/cartogram: 
