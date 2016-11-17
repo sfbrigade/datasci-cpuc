@@ -18,15 +18,15 @@ var cpucMetric = "downMean";
 var censusMetric = "income";
 
 d3.csv("data/output.csv", function(data) {
-    var color = d3.scale.linear()
-        .range(["#c0e4aa","#e6573d"])
+    var color = d3.scale.quantile()
+        .range(['#d73027', '#fc8d59', '#fee08b', '#ffffbf', '#d9ef8b', '#91cf60', '#1a9850'])
         .domain(d3.extent(data, function(d){return +d[cpucMetric]}))
         // debugger
-    // var transform = d3.geo.transform({point: projectPoint}),
+
     var transform = d3.geo.transform(),
         path = d3.geo.path().projection(transform);
     var radius = d3.scale.linear()
-        .range([3, 15])
+        .range([3, 20])
         .domain(d3.extent(data, function(d){return +d[censusMetric]}))
 
     data.forEach(function(d) {
@@ -34,6 +34,11 @@ d3.csv("data/output.csv", function(data) {
 		})
 
     data = data.sort(function(a, b) { return b[censusMetric] - a[censusMetric]; })
+    var geoJson
+
+    csv2geojson.csv2geojson(data, function(err, data) {
+      geoJson = data;
+    });
 
     var feature = g.selectAll("circle")
         .data(data)
@@ -45,7 +50,7 @@ d3.csv("data/output.csv", function(data) {
         .attr("r", function(d) { return radius(d[censusMetric]); })
         .attr('fill', function(d){ return color(d[cpucMetric]) } )
         .style("stroke-width",0.7)
-        .style("fill-opacity", 0.5)
+        .style("fill-opacity", 0.8)
         .style("cursor", "default")
         .on("mouseover", function(d){
           d3.select(this)
