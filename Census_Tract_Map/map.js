@@ -49,12 +49,12 @@ d3.json("data/data.geo.json", function(collection) {
       .on("mouseover", function(d){
         d3.select(this)
         .style("fill-opacity", 1)
-        .style("stroke-width",1);
+        .style("stroke", "black");
       })
       .on("mouseout", function(d){
          d3.select(this)
          .style("fill-opacity", 0.5)
-         .style("stroke-width",0.7);
+         .style("stroke","none");
       });
 
   map.on("viewreset", update);
